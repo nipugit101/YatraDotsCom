@@ -1,0 +1,8 @@
+Make readme file using AI:
+files:-
+ 1.user.controllers.js
+ 2.user.model.js
+ 3.user.service.js
+ 4.user.routers.js
+
+promte for readme: create a readme.md file to docs the /users/register with description  and status code, also write the how the data is required in the endpoints.Add example of response 

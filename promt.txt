@@ -1,0 +1,1 @@
+Readme.md  :create a reame.md file to docs the '/user/register' end points with description and status code, also write the how the data is required in the endpoint, add example of responces that use get from the endpoint.
