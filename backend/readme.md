@@ -1,12 +1,15 @@
 
+---
 
-# User API Documentation
+# User & Captain API Documentation
+
+---
 
 ## **Endpoint: `/user/register`**
 
 ### **Method:** `POST`
 
-Registers a new user in the system.
+Registers a new **user** in the system.
 
 ---
 
@@ -44,16 +47,14 @@ The endpoint expects a JSON object with the following fields:
 
 * `fullname.firstname` → **required**, at least 5 characters, must be unique.
 * `fullname.lastname` → **required**, at least 5 characters, must be unique.
-* `email` → **required**, must be a valid email format, at least 8 characters, must be unique.
-* `password` → **required**, at least 3 characters.
+* `email` → **required**, valid email format, min 8 characters, must be unique.
+* `password` → **required**, min 3 characters.
 
 ---
 
 ## **Responses**
 
 ### ✅ **201 Created**
-
-User successfully registered.
 
 ```json
 {
@@ -70,11 +71,7 @@ User successfully registered.
 }
 ```
 
----
-
 ### ⚠️ **400 Bad Request**
-
-Validation error or missing fields.
 
 ```json
 {
@@ -83,20 +80,12 @@ Validation error or missing fields.
     {
       "field": "fullname.firstname",
       "message": "First name must be at least 5 characters long"
-    },
-    {
-      "field": "email",
-      "message": "Please enter a valid email"
     }
   ]
 }
 ```
 
----
-
 ### ⚠️ **409 Conflict**
-
-When email or fullname is already taken.
 
 ```json
 {
@@ -105,11 +94,7 @@ When email or fullname is already taken.
 }
 ```
 
----
-
 ### ❌ **500 Internal Server Error**
-
-Unexpected server error.
 
 ```json
 {
@@ -120,41 +105,124 @@ Unexpected server error.
 
 ---
 
-## **Example Usage**
+# **Endpoint: `/captain/register`**
 
-### **Request**
+### **Method:** `POST`
 
-```http
-POST /user/register
-Content-Type: application/json
+Registers a new **captain (driver)** in the system with vehicle details.
 
+---
+
+## **Request Body**
+
+```json
 {
   "fullname": {
-    "firstname": "Michael",
-    "lastname": "Johnson"
+    "firstname": "string (min 5 chars, required, unique)",
+    "lastname": "string (min 5 chars, required, unique)"
   },
-  "email": "michael.johnson@example.com",
-  "password": "mypassword"
+  "email": "string (valid email, min 8 chars, required, unique)",
+  "password": "string (min 3 chars, required)",
+  "vehical": {
+    "color": "string (min 3 chars, required)",
+    "plate": "string (min 3 chars, required)",
+    "capacity": "number (1-6, required)",
+    "vehicalType": "string (car | auto | bike)"
+  }
 }
 ```
 
-### **Successful Response**
+### **Example Request**
 
-```http
-201 Created
+```json
+{
+  "fullname": {
+    "firstname": "Nipukj",
+    "lastname": "Matabbar"
+  },
+  "email": "nipu@gmail.com",
+  "password": "Nipu@12345",
+  "vehical": {
+    "color": "red",
+    "plate": "TN65KS6569",
+    "capacity": 4,
+    "vehicalType": "car"
+  }
+}
 ```
+
+---
+
+## **Validation Rules**
+
+* `fullname.firstname` → **required**, at least 5 characters, must be unique.
+* `fullname.lastname` → **required**, at least 5 characters, must be unique.
+* `email` → **required**, valid email format, min 8 characters, must be unique.
+* `password` → **required**, at least 3 characters.
+* `vehical.color` → **required**, at least 3 characters.
+* `vehical.plate` → **required**, at least 3 characters.
+* `vehical.capacity` → **required**, integer between 1 and 6.
+* `vehical.vehicalType` → **required**, must be one of `car`, `auto`, or `bike`.
+
+---
+
+## **Responses**
+
+### ✅ **201 Created**
 
 ```json
 {
   "success": true,
-  "message": "User registered successfully",
+  "message": "Captain registered successfully",
   "data": {
-    "id": "64fba567ab12cd4567890123",
+    "id": "64fba567ab12cd4567890456",
     "fullname": {
-      "firstname": "Michael",
-      "lastname": "Johnson"
+      "firstname": "Nipukj",
+      "lastname": "Matabbar"
     },
-    "email": "michael.johnson@example.com"
-  }
+    "email": "nipu@gmail.com",
+    "vehical": {
+      "color": "red",
+      "plate": "TN65KS6569",
+      "capacity": 4,
+      "vehicalType": "car"
+    },
+    "status": "inactive"
+  },
+  "token": "jwt_token_here"
 }
 ```
+
+### ⚠️ **400 Bad Request**
+
+```json
+{
+  "success": false,
+  "errors": [
+    {
+      "field": "vehical.vehicalType",
+      "message": "Vehical type must be one of: car, auto, or bike"
+    }
+  ]
+}
+```
+
+### ⚠️ **409 Conflict**
+
+```json
+{
+  "success": false,
+  "message": "Captain already exists"
+}
+```
+
+### ❌ **500 Internal Server Error**
+
+```json
+{
+  "success": false,
+  "message": "Something went wrong, please try again later"
+}
+```
+
+---
