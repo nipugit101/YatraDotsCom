@@ -1,396 +1,359 @@
 
----
+# Backend API Documentation
 
-# User & Captain API Documentation
+## `/users/register` Endpoint
 
----
+### Description
 
-## **Endpoint: `/user/register`**
+Registers a new user by creating a user account with the provided information.
 
-### **Method:** `POST`
+### HTTP Method
 
-Registers a new **user** in the system.
+`POST`
 
----
-
-## **Request Body**
-
-The endpoint expects a JSON object with the following fields:
+### Request Body
 
 ```json
 {
   "fullname": {
-    "firstname": "string (min 5 chars, required, unique)",
-    "lastname": "string (min 5 chars, required, unique)"
+    "firstname": "string (required, min 3 characters)",
+    "lastname": "string (optional, min 3 characters)"
   },
-  "email": "string (valid email, min 8 chars, required, unique)",
-  "password": "string (min 3 chars, required)"
+  "email": "string (required, valid email)",
+  "password": "string (required, min 6 characters)"
 }
-```
+````
 
-### **Example Request**
+### Example Response
 
 ```json
 {
-  "fullname": {
-    "firstname": "Michael",
-    "lastname": "Johnson"
-  },
-  "email": "michael.johnson@example.com",
-  "password": "mypassword"
-}
-```
-
----
-
-## **Validation Rules**
-
-* `fullname.firstname` → **required**, at least 5 characters, must be unique.
-* `fullname.lastname` → **required**, at least 5 characters, must be unique.
-* `email` → **required**, valid email format, min 8 characters, must be unique.
-* `password` → **required**, min 3 characters.
-
----
-
-## **Responses**
-
-### ✅ **201 Created**
-
-```json
-{
-  "success": true,
-  "message": "User registered successfully",
-  "data": {
-    "id": "64fba567ab12cd4567890123",
+  "user": {
     "fullname": {
-      "firstname": "Michael",
-      "lastname": "Johnson"
+      "firstname": "string",
+      "lastname": "string"
     },
-    "email": "michael.johnson@example.com"
+    "email": "string",
+    "password": "string"
+  },
+  "token": "string (JWT Token)"
+}
+```
+
+---
+
+## `/users/login` Endpoint
+
+### Description
+
+Authenticates a user using their email and password, returning a JWT token upon successful login.
+
+### HTTP Method
+
+`POST`
+
+### Endpoint
+
+`/users/login`
+
+### Request Body
+
+```json
+{
+  "email": "string (required, valid email)",
+  "password": "string (required, min 6 characters)"
+}
+```
+
+### Example Response
+
+```json
+{
+  "user": {
+    "fullname": {
+      "firstname": "string",
+      "lastname": "string"
+    },
+    "email": "string",
+    "password": "string"
+  },
+  "token": "string (JWT Token)"
+}
+```
+
+---
+
+## `/users/profile` Endpoint
+
+### Description
+
+Retrieves the profile information of the currently authenticated user.
+
+### HTTP Method
+
+`GET`
+
+### Authentication
+
+Requires a valid JWT token in the Authorization header:
+
+```
+Authorization: Bearer <token>
+```
+
+### Example Response
+
+```json
+{
+  "user": {
+    "fullname": {
+      "firstname": "string",
+      "lastname": "string"
+    },
+    "email": "string"
   }
 }
 ```
 
-### ⚠️ **400 Bad Request**
+---
+
+## `/users/logout` Endpoint
+
+### Description
+
+Logs out the current user and blacklists the token provided in cookie or headers.
+
+### HTTP Method
+
+`GET`
+
+### Authentication
+
+Requires a valid JWT token in the Authorization header or cookie.
+
+### Example Response
 
 ```json
 {
-  "success": false,
-  "errors": [
-    {
-      "field": "fullname.firstname",
-      "message": "First name must be at least 5 characters long"
-    }
-  ]
-}
-```
-
-### ⚠️ **409 Conflict**
-
-```json
-{
-  "success": false,
-  "message": "Email already exists"
-}
-```
-
-### ❌ **500 Internal Server Error**
-
-```json
-{
-  "success": false,
-  "message": "Something went wrong, please try again later"
+  "user": {
+    "fullname": {
+      "firstname": "string",
+      "lastname": "string"
+    },
+    "email": "string",
+    "password": "string"
+  },
+  "token": "string"
 }
 ```
 
 ---
 
+## `/captains/register` Endpoint
 
+### Description
 
-# **Captain API Documentation**
+Registers a new captain by creating a captain account with the provided information.
 
----
+### HTTP Method
 
-## **Endpoint: `/captains/register`**
+`POST`
 
-### **Method:** `POST`
-
-Registers a new **captain (driver)** in the system.
-
----
-
-## **Request Body**
+### Request Body
 
 ```json
 {
   "fullname": {
-    "firstname": "string, min 5 chars, required, must be unique",  // e.g., "Nipukj"
-    "lastname": "string, min 5 chars, required, must be unique"   // e.g., "Matabbar"
+    "firstname": "string (required, min 3 characters)",
+    "lastname": "string (optional, min 3 characters)"
   },
-  "email": "string, valid email, min 8 chars, required, unique", // e.g., "nipu@gmail.com"
-  "password": "string, min 3 chars, required",                   // e.g., "Nipu@12345"
+  "email": "string (required, valid email)",
+  "password": "string (required, min 6 characters)",
   "vehicle": {
-    "vehicleType": "string, required, one of: car, auto, bike", // e.g., "car"
-    "plate": "string, min 3 chars, required",                   // e.g., "TN65KS6569"
-    "color": "string, min 3 chars, required",                   // e.g., "red"
-    "capacity": "number, required, integer between 1-6"         // e.g., 4
+    "color": "string (required, min 3 characters)",
+    "plate": "string (required, min 3 characters)",
+    "capacity": "number (required, min 1)",
+    "vehicleType": "string (required, 'car', 'motorcycle', or 'auto')"
   }
 }
 ```
 
----
-
-### **Example Request**
+### Example Response
 
 ```json
 {
-  "fullname": {
-    "firstname": "Nipukj",
-    "lastname": "Matabbar"
-  },
-  "email": "nipu@gmail.com",
-  "password": "Nipu@12345",
-  "vehicle": {
-    "vehicleType": "car",
-    "plate": "TN65KS6569",
-    "color": "red",
-    "capacity": 4
-  }
-}
-```
-
----
-
-### **Responses**
-
-#### ✅ **201 Created**
-
-```json
-{
-  "success": true,
-  "message": "Captain registered successfully",
-  "data": {
-    "id": "64fba567ab12cd4567890456",            // auto-generated ID
-    "fullname": {
-      "firstname": "Nipukj",
-      "lastname": "Matabbar"
-    },
-    "email": "nipu@gmail.com",
-    "vehicle": {
-      "vehicleType": "car",
-      "plate": "TN65KS6569",
-      "color": "red",
-      "capacity": 4
-    },
-    "status": "inactive"                          // default status
-  },
-  "token": "jwt_token_here"                      // JWT token for authentication
-}
-```
-
-#### ⚠️ **400 Bad Request**
-
-```json
-{
-  "success": false,
-  "errors": [
-    {
-      "field": "fullname.firstname",
-      "message": "First name must be at least 5 characters long"
-    },
-    {
-      "field": "vehicle.vehicleType",
-      "message": "vehicle type must be one of: car, auto, or bike"
-    }
-  ]
-}
-```
-
-#### ⚠️ **409 Conflict**
-
-```json
-{
-  "success": false,
-  "message": "Captain already exists"
-}
-```
-
-#### ❌ **500 Internal Server Error**
-
-```json
-{
-  "success": false,
-  "message": "Something went wrong, please try again later"
-}
-```
-
----
-
-## **Endpoint: `/captains/login`**
-
-### **Method:** `POST`
-
-Login a captain and generate an authentication token.
-
----
-
-### **Request Body**
-
-```json
-{
-  "email": "string, valid email, required",        // e.g., "nipu@gmail.com"
-  "password": "string, min 3 chars, required"      // e.g., "Nipu@12345"
-}
-```
-
----
-
-### **Example Request**
-
-```json
-{
-  "email": "nipu@gmail.com",
-  "password": "Nipu@12345"
-}
-```
-
----
-
-### **Responses**
-
-#### ✅ **200 OK**
-
-```json
-{
-  "success": true,
-  "message": "Logged in successfully",
   "captain": {
-    "id": "64fba567ab12cd4567890456",
     "fullname": {
-      "firstname": "Nipukj",
-      "lastname": "Matabbar"
+      "firstname": "string",
+      "lastname": "string"
     },
-    "email": "nipu@gmail.com",
+    "email": "string",
+    "password": "string",
     "vehicle": {
-      "vehicleType": "car",
-      "plate": "TN65KS6569",
-      "color": "red",
-      "capacity": 4
-    },
-    "status": "inactive"
-  },
-  "token": "jwt_token_here"   // JWT token for authentication
-}
-```
-
-#### ⚠️ **400 Bad Request**
-
-```json
-{
-  "success": false,
-  "errors": [
-    {
-      "field": "email",
-      "message": "Please enter a valid email"
+      "color": "string",
+      "plate": "string",
+      "capacity": "number",
+      "vehicleType": "string"
     }
-  ]
-}
-```
-
-#### ⚠️ **401 Unauthorized**
-
-```json
-{
-  "success": false,
-  "message": "Invalid email or password"
+  },
+  "token": "string (JWT Token)"
 }
 ```
 
 ---
 
-## **Endpoint: `/captains/profile`**
+## `/captains/login` Endpoint
 
-### **Method:** `GET`
+### Description
 
-Fetch the currently logged-in captain's profile.
+Authenticates a captain using their email and password, returning a JWT token upon successful login.
 
-**Headers:**
+### HTTP Method
 
-```http
-Authorization: Bearer <jwt_token_here>
-```
+`POST`
 
----
+### Endpoint
 
-### **Response**
+`/captains/login`
 
-#### ✅ **200 OK**
+### Request Body
 
 ```json
 {
-  "success": true,
+  "email": "string (required, valid email)",
+  "password": "string (required, min 6 characters)"
+}
+```
+
+### Example Response
+
+```json
+{
   "captain": {
-    "id": "64fba567ab12cd4567890456",
     "fullname": {
-      "firstname": "Nipukj",
-      "lastname": "Matabbar"
+      "firstname": "string",
+      "lastname": "string"
     },
-    "email": "nipu@gmail.com",
+    "email": "string",
+    "password": "string",
     "vehicle": {
-      "vehicleType": "car",
-      "plate": "TN65KS6569",
-      "color": "red",
-      "capacity": 4
+      "color": "string",
+      "plate": "string",
+      "capacity": "number",
+      "vehicleType": "string"
+    }
+  },
+  "token": "string (JWT Token)"
+}
+```
+
+---
+
+## `/captains/profile` Endpoint
+
+### Description
+
+Retrieves the profile information of the currently authenticated captain.
+
+### HTTP Method
+
+`GET`
+
+### Authentication
+
+Requires a valid JWT token in the Authorization header:
+
+```
+Authorization: Bearer <token>
+```
+
+### Example Response
+
+```json
+{
+  "captain": {
+    "fullname": {
+      "firstname": "string",
+      "lastname": "string"
     },
-    "status": "inactive"
+    "email": "string",
+    "vehicle": {
+      "color": "string",
+      "plate": "string",
+      "capacity": "number",
+      "vehicleType": "string"
+    }
   }
 }
 ```
 
-#### ⚠️ **401 Unauthorized**
+---
+
+## `/captains/logout` Endpoint
+
+### Description
+
+Logs out the current captain and blacklists the token provided in cookie or headers.
+
+### HTTP Method
+
+`GET`
+
+### Authentication
+
+Requires a valid JWT token in the Authorization header or cookie.
+
+### Example Response
 
 ```json
 {
-  "success": false,
-  "message": "Unauthorized"  // Token missing, invalid, or blacklisted
+  "message": "Logout successfully"
 }
 ```
 
 ---
 
-## **Endpoint: `/captains/logout`**
+## `/maps/get-coordinates` Endpoint
 
-### **Method:** `POST`
+### Description
 
-Logout the captain and blacklist the token.
+Retrieves the coordinates (latitude and longitude) for a given address.
 
-**Headers:**
+### HTTP Method
 
-```http
-Authorization: Bearer <jwt_token_here>
+`GET`
+
+### Request Parameters
+
+* `address` (string, required): The address to retrieve coordinates for.
+
+### Example Request
+
+```
+GET /maps/get-coordinates?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA
 ```
 
----
-
-### **Response**
-
-#### ✅ **200 OK**
+### Example Response
 
 ```json
 {
-  "success": true,
-  "message": "Logged out successfully"
+  "ltd": 37.4224764,
+  "lng": -122.0842499
 }
 ```
 
-#### ⚠️ **401 Unauthorized**
+### Error Responses
+
+* `400 Bad Request`: Missing or invalid address parameter.
+* `404 Not Found`: Coordinates not found.
 
 ```json
 {
-  "success": false,
-  "message": "Unauthorized"  // Token missing, invalid, or already blacklisted
+  "message": "Coordinates not found"
 }
 ```
 
----
+```
 
+You can copy and paste the above directly into your `README.md` file.
+```
