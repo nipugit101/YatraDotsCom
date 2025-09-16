@@ -129,8 +129,8 @@ Registers a new **captain (driver)** in the system.
   },
   "email": "string, valid email, min 8 chars, required, unique", // e.g., "nipu@gmail.com"
   "password": "string, min 3 chars, required",                   // e.g., "Nipu@12345"
-  "vehical": {
-    "vehicalType": "string, required, one of: car, auto, bike", // e.g., "car"
+  "vehicle": {
+    "vehicleType": "string, required, one of: car, auto, bike", // e.g., "car"
     "plate": "string, min 3 chars, required",                   // e.g., "TN65KS6569"
     "color": "string, min 3 chars, required",                   // e.g., "red"
     "capacity": "number, required, integer between 1-6"         // e.g., 4
@@ -150,8 +150,8 @@ Registers a new **captain (driver)** in the system.
   },
   "email": "nipu@gmail.com",
   "password": "Nipu@12345",
-  "vehical": {
-    "vehicalType": "car",
+  "vehicle": {
+    "vehicleType": "car",
     "plate": "TN65KS6569",
     "color": "red",
     "capacity": 4
@@ -176,8 +176,8 @@ Registers a new **captain (driver)** in the system.
       "lastname": "Matabbar"
     },
     "email": "nipu@gmail.com",
-    "vehical": {
-      "vehicalType": "car",
+    "vehicle": {
+      "vehicleType": "car",
       "plate": "TN65KS6569",
       "color": "red",
       "capacity": 4
@@ -199,8 +199,8 @@ Registers a new **captain (driver)** in the system.
       "message": "First name must be at least 5 characters long"
     },
     {
-      "field": "vehical.vehicalType",
-      "message": "Vehical type must be one of: car, auto, or bike"
+      "field": "vehicle.vehicleType",
+      "message": "vehicle type must be one of: car, auto, or bike"
     }
   ]
 }
@@ -271,8 +271,8 @@ Login a captain and generate an authentication token.
       "lastname": "Matabbar"
     },
     "email": "nipu@gmail.com",
-    "vehical": {
-      "vehicalType": "car",
+    "vehicle": {
+      "vehicleType": "car",
       "plate": "TN65KS6569",
       "color": "red",
       "capacity": 4
@@ -336,8 +336,8 @@ Authorization: Bearer <jwt_token_here>
       "lastname": "Matabbar"
     },
     "email": "nipu@gmail.com",
-    "vehical": {
-      "vehicalType": "car",
+    "vehicle": {
+      "vehicleType": "car",
       "plate": "TN65KS6569",
       "color": "red",
       "capacity": 4

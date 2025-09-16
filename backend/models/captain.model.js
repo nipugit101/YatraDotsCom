@@ -36,12 +36,12 @@ const captainSchema = new mongoose.Schema({
     enum: ['active', 'inactive'],
     default: 'inactive'
   },
-  vehical: {
+  vehicle: {
     color: {
       type: String,
       required: true,
     },
-    vehicalType: {
+    vehicleType: {
       type: String,
       required: true,
       enum: ['car', 'auto', 'bike'],  // ✅ match your route validation

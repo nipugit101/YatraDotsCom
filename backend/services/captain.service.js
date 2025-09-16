@@ -6,8 +6,8 @@ async function hashPassword(password) {
   return await bcrypt.hash(password, saltRounds);
 }
 
-async function createCaptain({ firstname, lastname, email, password, vehicalType, plate, color, capacity }) {
-  if (!firstname || !email || !password || !vehicalType || !plate || !color || !capacity) {
+async function createCaptain({ firstname, lastname, email, password, vehicleType, plate, color, capacity }) {
+  if (!firstname || !email || !password || !vehicleType || !plate || !color || !capacity) {
     throw new Error('All fields are required');
   }
 
@@ -16,8 +16,8 @@ async function createCaptain({ firstname, lastname, email, password, vehicalType
     email,
     password,
     socketId: null,   // ✅ explicitly set to null
-    vehical: {
-      vehicalType,
+    vehicle: {
+      vehicleType,
       plate,
       color,
       capacity
